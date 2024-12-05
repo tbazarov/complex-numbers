@@ -1,12 +1,9 @@
 #include <stdio.h>
+#include "complex_declars.h"
 #include <math.h>
 #include <assert.h>
 
-typedef struct Complex 
-{
-    double re; 
-    double im; 
-} Complex;
+
 
 
 
@@ -38,7 +35,10 @@ Complex multiply(Complex a, Complex b)
     return result;
 }
 
-
+double abs(Complex z) 
+{
+    return sqrt(z.re * z.re + z.im * z.im);
+}
 
 Complex divide(Complex a, Complex b) 
 {
@@ -55,31 +55,24 @@ Complex divide(Complex a, Complex b)
 }
 
 
-void toPolar(Complex c, double* radius, double* angle) 
+void toPolar(Complex z, double* radius, double* angle) 
 {
-    *radius = sqrt(c.re * c.re + c.im * c.im);
-    *angle = atan2(c.im, c.re); 
+    *radius = abs(z);
+    *angle = atan2(z.im, z.re); 
 }
 
-
-double modul(Complex c) 
-{
-    return sqrt(c.re * c.re + c.im * c.im);
-}
-
-
-Complex conjugate(Complex c) 
+Complex conjugate(Complex z) 
 {
     Complex result;
-    result.re = c.re;
-    result.im = -c.im; 
+    result.re = z.re;
+    result.im = -z.im; 
     return result;
 }
 
-Complex power(Complex c, double n) {
+Complex power(Complex z, double n) {
     
-    double radius = sqrt(c.re * c.re + c.im * c.im);
-    double angle = atan2(c.im, c.re); 
+    double radius = abs(z);
+    double angle = atan2(z.im, z.re); 
     
     double newRadius = pow(radius, n);  
     double newAngle = angle * n;
@@ -91,53 +84,23 @@ Complex power(Complex c, double n) {
 }
 
 
-void test() 
-{
-    Complex a = {3, 4}; 
-    Complex b = {1, 2};
-
-    printf("Исходные данные a = %.2f + %.2fi, b = %.2f + %.2fi\n", a.re, a.im, b.re, b.im);
-
-    Complex sum = add(a, b);
-    assert(sum.re == 4 && sum.im == 6);
+Complex complex_power(Complex z, Complex exponent) {
+    Complex compow_res;
     
-
-    Complex diff = subtract(a, b);
-    assert(diff.re == 2 && diff.im == 2);
-    
-
-    Complex prod = multiply(a, b);
-    assert(prod.re == -5 && prod.im == 10);
-    
-
-    Complex quot = divide(a, b);
-    assert(quot.re == 2.2 && quot.im == -0.4);
-    
-
     double radius, angle;
-    toPolar(a, &radius, &angle);
-    assert(fabs(radius - 5) < 0.01);
-    assert(fabs(angle - atan2(4, 3)) < 0.01);
-    
+    toPolar(z, &radius, &angle);
+   
+    double a = exponent.re;             
+    double b = exponent.im;             
 
-    double mod = modul(a);
-    assert(mod == 5);
-    
+    double newRadius = pow(radius, a) * exp(-b * angle); 
+    double newAngle = a * log(radius) + b * angle;        
 
-    Complex conj = conjugate(a);
-    assert(conj.re == 3 && conj.im == -4);
-    
-    
-    double exponent = 2; 
-    Complex result = power(a, exponent);
-    assert(fabs(result.re - (-7)) < 0.01);
-    assert(fabs(result.im - 24) < 0.01);
-    
+    compow_res.re = newRadius * cos(newAngle);   
+    compow_res.im = newRadius * sin(newAngle);   
+
+    return compow_res;
 }
 
-int main()
-{
-    test();
-    printf("Все тесты прошли успешно! \n");
-    return 0;
-}
+
+
