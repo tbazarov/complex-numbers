@@ -71,8 +71,8 @@ Complex conjugate(Complex z)
 
 Complex power(Complex z, double n) {
     
-    double radius = abs(z);
-    double angle = atan2(z.im, z.re); 
+    *radius = abs(z);
+    *angle = atan2(z.im, z.re); 
     
     double newRadius = pow(radius, n);  
     double newAngle = angle * n;
@@ -84,23 +84,23 @@ Complex power(Complex z, double n) {
 }
 
 
-Complex complex_power(Complex z, Complex exponent) {
-    Complex compow_res;
+// Complex complex_power(Complex z, Complex exponent) {
+//     Complex compow_res;
     
-    double radius, angle;
-    toPolar(z, &radius, &angle);
+//     double radius, angle;
+//     toPolar(z, &radius, &angle);
    
-    double a = exponent.re;             
-    double b = exponent.im;             
+//     double a = exponent.re;             
+//     double b = exponent.im;             
 
-    double newRadius = pow(radius, a) * exp(-b * angle); 
-    double newAngle = a * log(radius) + b * angle;        
+//     double newRadius = pow(radius, a) * exp(-b * angle); 
+//     double newAngle = a * log(radius) + b * angle;        
 
-    compow_res.re = newRadius * cos(newAngle);   
-    compow_res.im = newRadius * sin(newAngle);   
+//     compow_res.re = newRadius * cos(newAngle);   
+//     compow_res.im = newRadius * sin(newAngle);   
 
-    return compow_res;
-}
+//     return compow_res;
+// }
 
 
 
